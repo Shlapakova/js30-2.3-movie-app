@@ -1,0 +1,125 @@
+body {
+  background-color: rgb(0, 0, 0);
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.01em;
+  font-weight: 200;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(36, 41, 74);
+  box-shadow: inset 1px 1px 6px 2px rgb(59, 62, 214);
+  background-size: cover;
+  filter: blur(10px);
+  z-index: -1;
+}
+
+.search-icon {
+  border: 2px solid #000000;
+  border-radius: 10px;
+  padding: 5px 5px;
+  max-width: 30px;
+  box-shadow: 10px 5px 5px #000000;
+}
+
+.search-icon:hover {
+  opacity: 0.7;
+}
+
+.search-container {
+  display: flex;
+  gap: 2rem;
+  margin: 80px;
+  justify-content: end;
+  margin: 0px;
+  padding: 50px 0px;
+  justify-content: center;
+  top: 10px;
+  left: 50%;
+}
+
+#search-field {
+  border-radius: 10px;
+  box-shadow: 10px 5px 5px #000000;
+}
+
+#movies-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 80px;
+}
+
+.card {
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 300px;
+  margin: 1rem;
+  background-color: rgb(63, 72, 129);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.card image {
+  width: 100%;
+}
+
+.movie-info {
+  background-color: rgb(63, 72, 129);
+  color: #ffffff;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem 1rem;
+  letter-spacing: 0.5px;
+}
+
+.movie-info-plot{
+  background-color: rgb(63, 72, 129);
+  color: #ffffff;
+  font-weight: 400;
+  padding: 0.5rem 1rem 1rem;
+  letter-spacing: 0.5px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  background: -webkit-linear-gradient(45deg, rgb(40, 40, 40), rgb(133, 133, 133));
+  box-shadow: inset 1px 1px 6px 2px rgb(53, 53, 53);
+  padding: 20px;
+  z-index: 0;
+}
+
+footer img {
+  width: 15vh;
+}
+
+footer p {
+  font-weight: 700;
+}
+
+.footer-logo {
+  width: 150px;
+}
