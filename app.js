@@ -1,98 +1,98 @@
 "use strict";
-const apiKey = "95ed1656";
-const urlBase = `http://www.omdbapi.com/?apikey=${apiKey}`;
+
+const accessKey = "deAeNgQRbrdW_4C1n9uhO6_6bBwtES9YbsxIOL0uRPI";
+
 const searchField = document.getElementById('search-field');
-let moviesData = [];
+const searchIcon = document.querySelector('.search-icon');
+const moviesWrapper = document.getElementById('movies-wrapper');
 
-async function getRandomMovies() {
-  const randomMovies = [];
+searchField.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch();
+    }
+});
 
-  while (randomMovies.length < 15) {
-    const randomPage = Math.floor(Math.random() * 100) + 1;
-    const url = `${urlBase}&s=movie&page=${randomPage}`;
+searchIcon.addEventListener('click', function(event) {
+    event.preventDefault();
+    performSearch();
+});
+
+function performSearch() {
+    const query = searchField.value.trim();
+    if (query === '') {
+        alert('Введите запрос для поиска.');
+        return;
+    }
+    searchPhotos(query);
+}
+
+async function searchPhotos(query) {
+    moviesWrapper.innerHTML = '<p>Загрузка...</p>';
+
+    const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=30&orientation=landscape&client_id=${accessKey}`;
 
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
 
-      if (data.Response === "True") {
-        const movies = data.Search;
-
-        movies.forEach(movie => {
-          if (randomMovies.length < 15 && !randomMovies.find(m => m.imdbID === movie.imdbID)) {
-            randomMovies.push(movie);
-          }
-        });
-      }
+        const data = await response.json();
+        displayPhotos(data.results);
     } catch (error) {
-      console.error('Ошибка при получении данных:', error);
+        console.error(error);
+        moviesWrapper.innerHTML = `<p>Произошла ошибка.</p>`;
     }
-  }
-
-  await Promise.all(randomMovies.map(movie => fetchMovieDetails(movie)));
-
-  moviesData = randomMovies;
-  displayCards();
 }
 
-async function fetchMovieDetails(movie) {
-  const url = `${urlBase}&i=${movie.imdbID}`;
+function displayPhotos(photos) {
+    if (photos.length === 0) {
+        moviesWrapper.innerHTML = '<p>Не найдено</p>';
+        return;
+    }
 
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
+    moviesWrapper.innerHTML = '';
 
-    movie.imdbRating = data.imdbRating || "";
-    movie.Plot = data.Plot || "Описание недоступно";
-  } catch (error) {
-    console.error('Ошибка при получении данных фильма:', error);
-  }
-}
-
-function createCard(movie) {
-  return `
-    <div class="card" data-movie-name="${movie.Title}">
-      <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300"}" alt="${movie.Title}">
-      <div class="movie-info">
-        <p><strong>${movie.Title}</strong></p>
-        <p>${movie.imdbRating}</p>
-        </div>
-        <p> ${movie.Plot}</p>
-    </div>
-  `;
-}
-
-function displayCards() {
-  const moviesWrapper = document.getElementById('movies-wrapper');
-
-  if (moviesData.length === 0) {
-    moviesWrapper.innerHTML = "<p>No movies found.</p>";
-    return;
-  }
-
-  const cards = moviesData.map(movie => createCard(movie)).join('');
-  moviesWrapper.innerHTML = cards;
-
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      const movieName = card.getAttribute('data-movie-name');
-      const movie = moviesData.find(m => m.Title === movieName);
-      console.log(movie);
+    photos.forEach(photo => {
+        const img = document.createElement('img');
+        img.src = photo.urls.small;
+        img.alt = photo.alt_description || 'Unsplash Photo';
+        img.title = photo.alt_description || 'Unsplash Photo';
+        img.classList.add('gallery-image');
+        moviesWrapper.appendChild(img);
     });
-  });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  searchField.focus();
+async function getRandomPhotos() {
+    moviesWrapper.innerHTML = '<p>Загрузка...</p>';
 
-  getRandomMovies();
+    const url = `https://api.unsplash.com/photos/random?count=15&orientation=landscape&client_id=${accessKey}`;
 
-  searchField.addEventListener('input', (event) => {
-    const searchTerm = event.target.value;
-    if (searchTerm) {
-      getData(searchTerm);
-    } else {
-      getRandomMovies();
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
+
+        const photos = await response.json();
+        displayPhotos(photos);
+    } catch (error) {
+        console.error(error);
+        moviesWrapper.innerHTML = `<p>Произошла ошибка.</p>`;
     }
-  });
+}
+
+function toggleClearButton() {
+  if (searchField.value.trim() !== '') {
+      clearButton.classList.add('show');
+      clearButton.classList.remove('hide');
+  } else {
+      clearButton.classList.add('hide');
+      clearButton.classList.remove('show');
+  }
+}
+document.addEventListener('DOMContentLoaded', function () {
+    searchField.focus();
+    getRandomPhotos();
 });

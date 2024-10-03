@@ -62,7 +62,7 @@ body {
 #movies-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  padding: 80px;
+  padding: 40px;
 }
 
 .card {
@@ -82,8 +82,7 @@ body {
   width: 100%;
 }
 
-.movie-info {
-  background-color: rgb(63, 72, 129);
+.gallery-image {
   color: #ffffff;
   font-weight: 400;
   display: flex;
@@ -91,6 +90,7 @@ body {
   justify-content: space-between;
   padding: 0.5rem 1rem 1rem;
   letter-spacing: 0.5px;
+  max-width: 95%;
 }
 
 .movie-info-plot{
